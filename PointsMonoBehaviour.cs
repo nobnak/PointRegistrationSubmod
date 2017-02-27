@@ -1,32 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Gist;
 
 namespace PointRegistrationSubmod {
         
     public class PointsMonoBehaviour : MonoBehaviour {
         public Camera targetCam;
         public float lifetime = 3f;
-        public Texture pointMarkerTexture;
 
-        RegisteredPoints registered;
+        [Header("Debug")]
+        public bool isDebugMode;
+        public static readonly Color[] POINT_MARKER_TYPE_COLOR = new Color[] {
+            Color.red, Color.green, Color.blue 
+        };
+        public float pointMarkerSize = 1f;
+        public float pointMarkerDepth = 10f;
 
-        public List<Point> Points { get { return registered.Latest; } }
+        public RegisteredPoints Registered { get; private set; }
+
+        public Vector3 NormalizedToLocalPosition(Vector3 normalizedPosition) {
+            var p = targetCam.ViewportToWorldPoint (normalizedPosition);
+            return targetCam.transform.InverseTransformPoint (p);
+        }
 
         #region Unity
         void OnEnable() {
-            registered = new RegisteredPoints ();
+            Registered = new RegisteredPoints ();
         }
         void Update() {
-            registered.Metabolize (lifetime);
+            Registered.Metabolize (lifetime);
         }
         void OnRenderObject() {
             if ((targetCam.cullingMask & (1 << gameObject.layer)) == 0 || !isActiveAndEnabled)
                 return;
+            if (!isDebugMode)
+                return;
 
-            for (var i = 0; i < registered.Latest.Count; i++) {
-                var p = registered.Latest [i];
-                
+            var fig = GLFigure.Instance;
+            for (var i = 0; i < Registered.Latest.Count; i++) {
+                var p = Registered.Latest [i];
+                var viewportPos = (Vector3)p.rect.center;
+                viewportPos.z = pointMarkerDepth;
+                var worldPos = targetCam.ViewportToWorldPoint (viewportPos);
+                fig.FillCircle (worldPos, targetCam.transform.rotation, pointMarkerSize * Vector3.one,
+                    POINT_MARKER_TYPE_COLOR [p.type]);
             }
         }
         #endregion
@@ -35,12 +53,12 @@ namespace PointRegistrationSubmod {
         public void Receive(Osc.OscPort.Capsule c) {
             Point p;
             if (Point.TryParse (c, out p))
-                registered.Add (p);
+                Registered.Add (p);
         }
         public void Error(System.Exception e) {
             Debug.LogErrorFormat ("Error {0}", e);
         }
         #endregion
-    
+
     }
 }

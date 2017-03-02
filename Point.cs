@@ -20,7 +20,9 @@ namespace PointRegistrationSubmod {
         }
 
         public static bool TryParse(Osc.OscPort.Capsule c, out Point p) {
-            var m = c.message;
+            return TryParse (c.message, out p);
+        }
+        public static bool TryParse(Osc.Message m, out Point p) {
             try {
                 if (m.path == PATH) {
                     p = Parse(m.data);

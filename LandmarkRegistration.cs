@@ -5,7 +5,7 @@ using Gist;
 
 namespace PointRegistrationSubmod {
         
-    public class PointsMonoBehaviour : MonoBehaviour {
+    public class LandmarkRegistration : MonoBehaviour {
         public Camera targetCam;
         public float lifetime = 3f;
 
@@ -50,9 +50,9 @@ namespace PointRegistrationSubmod {
         #endregion
 
         #region Event
-        public void Receive(Osc.OscPort.Capsule c) {
+        public void Receive(Osc.Message m) {
             Point p;
-            if (Point.TryParse (c, out p))
+            if (Point.TryParse (m, out p))
                 Registered.Add (p);
         }
         public void Error(System.Exception e) {

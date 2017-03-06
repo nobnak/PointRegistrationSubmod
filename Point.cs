@@ -35,8 +35,12 @@ namespace PointRegistrationSubmod {
             return false;
         }
         public static Point Parse(object[] data) {
+            var x = (float)data [2];
+            var y = (float)data [3];
+            var w = (float)data [4];
+            var h = (float)data [5];
             return new Point ((int)data [0], (int)data [1],
-                new Rect ((float)data [2], (float)data [3], (float)data [4], (float)data [5]),
+                new Rect (x - 0.5f * w, y - 0.5f * h, w, h),
                 Time.timeSinceLevelLoad);            
         }
 

@@ -8,10 +8,12 @@ namespace PointRegistrationSubmod {
 
         public readonly List<Point> Latest;
         public readonly List<Point> All;
+        public readonly SortedDictionary<int, Point> SortedIDToPoint;
 
         public RegisteredPoints() {
             this.Latest = new List<Point>();
             this.All = new List<Point>();
+            this.SortedIDToPoint = new SortedDictionary<int, Point> ();
         }
 
         public RegisteredPoints Add(Point p) {
@@ -32,10 +34,13 @@ namespace PointRegistrationSubmod {
 
         void BuildLatestPoints () {
             Latest.Clear ();
+            SortedIDToPoint.Clear ();
             for (var i = All.Count - 1; i >= 0; i--) {
                 var pa = All [i];
-                if (Latest.FindIndex (pl => pl.id == pa.id) < 0)
+                if (!SortedIDToPoint.ContainsKey (pa.id)) {
                     Latest.Add (pa);
+                    SortedIDToPoint.Add (pa.id, pa);
+                }
             }
         }
         

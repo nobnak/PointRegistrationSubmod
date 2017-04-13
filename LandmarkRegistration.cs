@@ -6,23 +6,22 @@ using Gist;
 namespace PointRegistrationSubmod {
         
     public class LandmarkRegistration : MonoBehaviour {
+        public const int TYPE_HILL = 0;
+        public const int TYPE_POND = 1;
+        public enum LandmarkTypeEnum { Hill = TYPE_HILL, Pond = TYPE_POND }
+        public static readonly Color[] POINT_MARKER_TYPE_COLOR = new Color[] {
+            Color.red, Color.green, Color.blue 
+        };
+
         public Camera targetCam;
         public float lifetime = 3f;
 
         [Header("Debug")]
         public bool isDebugMode;
-        public static readonly Color[] POINT_MARKER_TYPE_COLOR = new Color[] {
-            Color.red, Color.green, Color.blue 
-        };
         public float pointMarkerSize = 1f;
         public float pointMarkerDepth = 10f;
 
         public RegisteredPoints Registered { get; private set; }
-
-        public Vector3 NormalizedToLocalPosition(Vector3 normalizedPosition) {
-            var p = targetCam.ViewportToWorldPoint (normalizedPosition);
-            return targetCam.transform.InverseTransformPoint (p);
-        }
 
         #region Unity
         void OnEnable() {

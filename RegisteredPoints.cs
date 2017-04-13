@@ -26,6 +26,16 @@ namespace PointRegistrationSubmod {
             return this;
         }
 
+        public bool HasID(int id) { 
+            return SortedIDToPoint.ContainsKey (id);
+        }
+        public Point LatestPoint(int id) {
+            return SortedIDToPoint [id];
+        }
+        public Vector2 LatestPosition(int id) {
+            return LatestPoint (id).rect.center;
+        }
+
         void RemoveOldPoints (float lifetime) {
             var now = Time.timeSinceLevelLoad;
             while (All.Count > 0 && (now - All [0].time) > lifetime)

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gist;
+using UnityEngine.Assertions;
 
 namespace PointRegistrationSubmod {
-        
+    
+    [ExecuteInEditMode]
     public class LandmarkRegistration : MonoBehaviour {
         public const int TYPE_HILL = 0;
         public const int TYPE_POND = 1;
@@ -45,6 +47,9 @@ namespace PointRegistrationSubmod {
                 fig.FillCircle (worldPos, targetCam.transform.rotation, pointMarkerSize * Vector3.one,
                     POINT_MARKER_TYPE_COLOR [p.type]);
             }
+        }
+        void OnDisable() {
+            Registered.Dispose ();
         }
         #endregion
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using nobnak.Gist;
 using UnityEngine.Assertions;
+using nobnak.Gist.Extensions.ComponentExt;
 
 namespace PointRegistrationSubmod {
     
@@ -33,8 +34,9 @@ namespace PointRegistrationSubmod {
             Registered.Metabolize (lifetime);
         }
         void OnRenderObject() {
-            if ((targetCam.cullingMask & (1 << gameObject.layer)) == 0 || !isActiveAndEnabled)
+            if (!this.IsVisibleLayer())
                 return;
+
             if (!isDebugMode)
                 return;
 

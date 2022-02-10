@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using nobnak.Gist.GLTools;
 using UnityEngine;
-using nobnak.Gist;
-using UnityEngine.Assertions;
 
 namespace PointRegistrationSubmod {
-    
-    [ExecuteInEditMode]
+
+	[ExecuteInEditMode]
     public class LandmarkRegistration : MonoBehaviour {
         public const int TYPE_HILL = 0;
         public const int TYPE_POND = 1;
